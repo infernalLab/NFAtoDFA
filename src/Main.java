@@ -204,7 +204,7 @@ public class Main {
 //            System.out.println(movs);
 //            System.out.println("e plus plus test"+Arrays.toString(statess));
 //            movs.getLast().add(String.valueOf(tempEclosure));
-//            System.out.println("endssssssssssss");
+           System.out.println("endssssssssssss");
 //
 //        }
         if(eClosure.contains(tempEclosure)==false){
