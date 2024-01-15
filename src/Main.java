@@ -109,7 +109,7 @@ public class Main {
 
     }
 
-    public static void eClosure(String startState) {
+    public static LinkedList eClosure(String startState) {
 
         Integer result[] = new Integer[2];
         String statess[]=new String[1000];
@@ -214,6 +214,7 @@ public class Main {
         }
 
 
+        return tempEclosure;
     }
 
 
@@ -296,6 +297,7 @@ public class Main {
 
                         }
                         eClosure(tempA);
+                        temp.add(String.valueOf(eClosure(tempA)));
                         tempA="";
                             movs.add(temp);
 
@@ -339,14 +341,4 @@ public class Main {
         return a;
 
     }
-
-    public static void finals(){
-
-        System.out.println("this is for finalize test:) github");
-
-    }
-
-
-
-
 }
