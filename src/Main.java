@@ -89,14 +89,11 @@ public class Main {
 
         eClosure(startState);
         move();
-        findFinalState();
-        inOut();
         System.out.println("states is: " + states);
         System.out.println("eclosure is: " + eClosure);
         System.out.println("movs is: " + movs);
-
-        //traps();
-
+        findFinalState();
+        inOut();
     }
 
     public static void addMove(String state, String symbol, String secState) {
@@ -122,7 +119,7 @@ public class Main {
         String statess[] = new String[1000];
         statess = startState.split(" ");
         LinkedList<LinkedList<String>> tempp = copyLinkedList(states);
-        Stack position = new Stack();
+        Stack position = new Stack();//vase bargashtan b state ghabl
         LinkedList tempEclosure = new LinkedList<String>();
         for (int zz = 0; zz < statess.length; zz++) {
 
@@ -154,7 +151,7 @@ public class Main {
                     } else if (isArrayNull(result) && position.isEmpty()) {
 
                         for (int i = 0; i < tempEclosure.size() - 1; i++) {
-                            System.out.println(tempEclosure);
+
 
                             for (int j = i + 1; j < tempEclosure.size(); j++) {
 
@@ -164,7 +161,6 @@ public class Main {
                                     j--;
 
                                 }
-
 
                             }
 
@@ -260,7 +256,6 @@ public class Main {
                     if (!isArrayNull(result)) {
 
                         count = count(states.get(result[0]), symbols.get(j));
-                        System.out.println(count);
                         states.get((int) result[0]).remove((int) result[1]);//delete mikonim
                         temp.add(states.get((int) result[0]).get((int) result[1]));
                         tempA = temp.getLast();
