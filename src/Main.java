@@ -1,21 +1,21 @@
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.*;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
 
-    public static LinkedList<LinkedList<String>> states=new LinkedList();
-    public static ArrayList<String>symbols= new ArrayList<>();
-    public static LinkedList<LinkedList<String>> eClosure=new LinkedList();
-    public static LinkedList<LinkedList<String>> movs=new LinkedList<>();
+    public static LinkedList<LinkedList<String>> states = new LinkedList();
+    public static LinkedList<String> symbols = new LinkedList<>();
+    public static LinkedList<LinkedList<String>> eClosure = new LinkedList();
+    public static LinkedList<LinkedList<String>> movs = new LinkedList<LinkedList<String>>();
     public static String startState;
+    public static String[] finalState=new String[999];
 
     public static void main(String[] args) {
 
         Scanner in = new Scanner(System.in);
 
-        String state =in.nextLine();
+        String state = in.nextLine();
 
         //add states
         {
@@ -42,11 +42,15 @@ public class Main {
 
         //start state
         System.out.println("select start state: ");
-         startState=in.nextLine();
+        startState = in.nextLine();
+        //final
+        System.out.println("select final states: ");
+        finalState[0] = in.nextLine();
+        finalState=finalState[0].split(" ");
 
         //add symbols
         {
-            String symbol=in.nextLine();
+            String symbol = in.nextLine();
             {
                 while (true) {
 
@@ -61,7 +65,7 @@ public class Main {
 
                 }
                 //symbols.add(symbol);
-                System.out.println("syymmmbollls is: "+symbols.toString());
+                System.out.println("syymmmbollls is: " + symbols.toString());
             }
             symbols.add(symbol);
             System.out.println(symbols);
@@ -69,15 +73,15 @@ public class Main {
         //add move
         {
 
-            while (true){
+            while (true) {
 
-                String move=in.nextLine();
-                if(move.equals("end")){
+                String move = in.nextLine();
+                if (move.equals("end")) {
 
                     break;
 
                 }
-                addMove(move.substring(0, move.indexOf(",")),move.substring(move.indexOf(",")+1, move.lastIndexOf(",")),move.substring(move.lastIndexOf(",")+1, move.length()));
+                addMove(move.substring(0, move.indexOf(",")), move.substring(move.indexOf(",") + 1, move.lastIndexOf(",")), move.substring(move.lastIndexOf(",") + 1, move.length()));
 
             }
 
@@ -85,42 +89,42 @@ public class Main {
 
         eClosure(startState);
         move();
-        System.out.println("states is: "+states);
-        System.out.println("eclosure is: "+eClosure);
+        findFinalState();
+        inOut();
+        System.out.println("states is: " + states);
+        System.out.println("eclosure is: " + eClosure);
         System.out.println("movs is: " + movs);
+
+        //traps();
 
     }
 
-    public static void addMove(String state,String symbol,String secState){
+    public static void addMove(String state, String symbol, String secState) {
 
-        for (int i=0;i<states.size();i++ ){
+        for (int i = 0; i < states.size(); i++) {
 
-            if(states.get(i).getFirst().equals(state)){
+            if (states.get(i).getFirst().equals(state)) {
 
                 states.get(i).add(symbol);
                 states.get(i).add(secState);
                 break;
 
-            }else if(i==states.size()-1) {
+            } else if (i == states.size() - 1) {
 
             }
         }
-        //System.out.println(states);
 
     }
 
     public static LinkedList eClosure(String startState) {
 
         Integer result[] = new Integer[2];
-        String statess[]=new String[1000];
-        statess= startState.split(" ");
-
-        LinkedList<LinkedList<String>> tempp= copyLinkedList(states);
-        Stack position=new Stack();
-
-
-        LinkedList tempEclosure =new LinkedList<String>();
-        for(int zz=0;zz<statess.length;zz++) {
+        String statess[] = new String[1000];
+        statess = startState.split(" ");
+        LinkedList<LinkedList<String>> tempp = copyLinkedList(states);
+        Stack position = new Stack();
+        LinkedList tempEclosure = new LinkedList<String>();
+        for (int zz = 0; zz < statess.length; zz++) {
 
             while (true) {
 
@@ -136,10 +140,8 @@ public class Main {
                     position.add(result[0]);
 
                 }
-
                 result = findAny("e", result[0]);
                 while (isArrayNull(result)) {
-
 
                     if (isArrayNull(result) && !position.isEmpty()) {
 
@@ -168,23 +170,13 @@ public class Main {
 
                         }
 
-
                         break;
-
 
                     }
                 }
 
                 if (isArrayNull(result) && position.isEmpty()) {
 
-
-                    System.out.println(tempEclosure);
-                //if(eClosure.contains(tempEclosure)==false){
-
-//                    eClosure.add(tempEclosure);
-
-                //}
-                    System.out.println(tempp);
                     states = copyLinkedList(tempp);
                     break;
 
@@ -195,61 +187,48 @@ public class Main {
 
             }
 
-
-
         }
-        //jaygozin kardan eclosure ha dar mov
-//        if (!movs.isEmpty()){//ino mizarim choon aval eclosure ro seda kardim va vase bare aval khaali hast movs
-//
-//            System.out.println(movs);
-//            System.out.println("e plus plus test"+Arrays.toString(statess));
-//            movs.getLast().add(String.valueOf(tempEclosure));
-//           System.out.println("endssssssssssss");
-//
-//        }
-        if(eClosure.contains(tempEclosure)==false){
+        if (eClosure.contains(tempEclosure) == false) {
 
             eClosure.add(tempEclosure);
 
         }
-
-
         return tempEclosure;
     }
 
 
-    public static Integer[] findAny(String search, int zone){
+    public static Integer[] findAny(String search, int zone) {
 
-        boolean secBracke=false;
+        boolean secBracke = false;
 
         Integer temp[] = new Integer[2];
 
 
-        if (zone==-1){
-            for (int i=0;i<states.size();i++){
-                    if(states.get(i).getFirst().equals(search)){
+        if (zone == -1) {
+            for (int i = 0; i < states.size(); i++) {
+                if (states.get(i).getFirst().equals(search)) {
 
 //                        secBracke=true;
-                        temp[0]=i;
-                        temp[1]=0;//choon get first hast hamoo sefr ro mizarim
-                        break;
+                    temp[0] = i;
+                    temp[1] = 0;//choon get first hast hamoo sefr ro mizarim
+                    break;
 
-                    }
+                }
 //                if(secBracke=true) {
 //                    break;
 //                }
 
             }
             return temp;
-        }else  {
+        } else {
 
-            for (int j=0;j<states.get(zone).size();j++){
+            for (int j = 0; j < states.get(zone).size(); j++) {
 
-                if(states.get(zone).get(j).equals(search)){
+                if (states.get(zone).get(j).equals(search)) {
 
-                    secBracke=true;
-                    temp[0]=zone;
-                    temp[1]=j;
+                    secBracke = true;
+                    temp[0] = zone;
+                    temp[1] = j;
                     break;
 
                 }
@@ -262,78 +241,76 @@ public class Main {
 
     }
 
-    public static void move(){
+    public static void move() {
 
-        Integer result[]=new Integer[2];
+        Integer result[] = new Integer[2];
         String tempA = new String();
         int count;
-        for (int z=0;z<eClosure.size();z++) {
-            for (int i = 0; i < eClosure.get(z).size(); i++) {
+        for (int z = 0; z < eClosure.size(); z++) {
+            for (int j = 0; j < symbols.size(); j++) {
 
-                LinkedList<LinkedList<String>> temppp=copyLinkedList(states);
+                LinkedList<LinkedList<String>> temppp = copyLinkedList(states);
+                LinkedList<String> temp = new LinkedList();
+                temp.add(String.valueOf(z));
+                temp.add(symbols.get(j));
+                for (int i = 0; i < eClosure.get(z).size(); i++) {
 
-                for (int j = 0; j < symbols.size(); j++) {
-
-                    //System.out.println("find hat????"+eClosure.get(z).get(i).toString());
-                     result = findAny(eClosure.get(z).get(i).toString(), -1);
+                    result = findAny(eClosure.get(z).get(i).toString(), -1);
                     result = findAny((symbols.get(j).toString()), result[0]);
                     if (!isArrayNull(result)) {
 
-                        count=count(states.get(result[0]),symbols.get(j));
+                        count = count(states.get(result[0]), symbols.get(j));
                         System.out.println(count);
-                        LinkedList<String> temp = new LinkedList();
-                        //eClosure((String) states.get((int)result[0]).get((int)result[1]));
-                        temp.add(String.valueOf(z));
-                        temp.add(symbols.get(j));
-                        states.get((int)result[0]).remove((int)result[1]);//delete mikonim
-                        temp.add(states.get((int)result[0]).get((int)result[1]));
-                        tempA=temp.getLast();
-                        for(int a=0;a<count-1;a++){
+                        states.get((int) result[0]).remove((int) result[1]);//delete mikonim
+                        temp.add(states.get((int) result[0]).get((int) result[1]));
+                        tempA = temp.getLast();
+                        for (int a = 0; a < count - 1; a++) {
 
                             result = findAny((symbols.get(j).toString()), result[0]);
-                            states.get((int)result[0]).remove((int)result[1]);//delete mikonim
-                            temp.add(states.get((int)result[0]).get((int)result[1]));
-                            tempA= tempA+" "+ temp.getLast();
+                            states.get((int) result[0]).remove((int) result[1]);//delete mikonim
+                            temp.add(states.get((int) result[0]).get((int) result[1]));
+                            tempA = tempA + " " + temp.getLast();
 
                         }
-                        eClosure(tempA);
-                        temp.add(String.valueOf(eClosure(tempA)));
-                        tempA="";
-                            movs.add(temp);
-
-
                     }
-
                 }
-                states=copyLinkedList(temppp);
+                if(!tempA.isEmpty()) {
+
+                    eClosure(tempA);
+                    findInMov(eClosure(tempA));
+                    temp.add(String.valueOf(findInMov(eClosure(tempA))));
+                }
+                tempA = "";
+                movs.add(temp);
+                states = copyLinkedList(temppp);
             }
         }
     }
 
     public static boolean isArrayNull(Integer[] array) {
-        if(array[0]==null){
+        if (array[0] == null) {
             return true;
-        }else {
+        } else {
             return false;
         }
 
     }
 
-    public static LinkedList<LinkedList<String>>  copyLinkedList(LinkedList<LinkedList<String>> ll) {
+    public static LinkedList<LinkedList<String>> copyLinkedList(LinkedList<LinkedList<String>> ll) {
         LinkedList<LinkedList<String>> out = new LinkedList<>();
         for (LinkedList<String> tl : ll) {
-            out.add((LinkedList<String>)tl.clone());
+            out.add((LinkedList<String>) tl.clone());
         }
         return out;
     }
 
-    public static int count(LinkedList<String> eclow,String search){
+    public static int count(LinkedList<String> eclow, String search) {
 
-        int a=0;
+        int a = 0;
 
-        for(int i=0;i<eclow.size();i++){
+        for (int i = 0; i < eclow.size(); i++) {
 
-            if(eclow.get(i).equals(search))
+            if (eclow.get(i).equals(search))
                 a++;
 
         }
@@ -341,4 +318,67 @@ public class Main {
         return a;
 
     }
+
+    public static void inOut() {
+        boolean trapIsAvable=false;
+        for (int i = 0; i < movs.size(); i++) {
+
+
+            //baraye taskhise trap ha
+            if(movs.get(i).size()>2) {
+
+                System.out.println("(" + movs.get(i).get(0) + ", " + movs.get(i).get(1) + ", " + movs.get(i).getLast() + ")");
+
+            }else {//inja yani bayad trap dashte bashim
+
+                trapIsAvable=true;
+                System.out.println("(" + movs.get(i).get(0) + ", " + movs.get(i).get(1) + ", T)");
+
+            }
+
+        }
+        //set kardane khode state Trap
+        if(trapIsAvable==true){
+
+            for(int i = 0; i < symbols.size(); i++){
+
+                System.out.println("(T, " +symbols.get(i) + ", T)");
+
+            }
+
+        }
+
+    }
+    public static int findInMov(LinkedList a) {
+
+
+        for (int i = 0; i < eClosure.size(); i++) {
+
+            if (eClosure.get(i).equals(a)) {
+
+                return i;
+
+            }
+
+        }
+        return -1;
+    }
+
+    public static void findFinalState(){
+        String out="";
+        for(int j=0;j<finalState.length;j++) {
+
+            for (int i = 0; i < eClosure.size(); i++) {
+
+                if (eClosure.get(i).contains(finalState[j])) {
+                    out+=String.valueOf(i)+" ";
+                }
+
+            }
+
+        }
+        System.out.println("Start state is: 0");
+        System.out.println("Final state(s) is: "+out);
+    }
+
 }
