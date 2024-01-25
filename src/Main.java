@@ -138,7 +138,7 @@ public class Main {
 
                 }
                 result = findAny("e", result[0]);
-                while (isArrayNull(result)) {
+                while (isArrayNull(result)) {//vaghti k hich eclosurei toye zone peyda nakardim
 
                     if (isArrayNull(result) && !position.isEmpty()) {
 
@@ -149,13 +149,13 @@ public class Main {
                         }
 
                     } else if (isArrayNull(result) && position.isEmpty()) {
-
+                        //hazfe tekrari ha
                         for (int i = 0; i < tempEclosure.size() - 1; i++) {
 
 
                             for (int j = i + 1; j < tempEclosure.size(); j++) {
 
-                                if (tempEclosure.get(i).toString().compareTo(tempEclosure.get(j).toString()) == 0) {
+                                if (tempEclosure.get(i).toString().compareTo(tempEclosure.get(j).toString()) == 0) {//check kardande
 
                                     tempEclosure.remove(j);
                                     j--;
@@ -242,22 +242,22 @@ public class Main {
         Integer result[] = new Integer[2];
         String tempA = new String();
         int count;
-        for (int z = 0; z < eClosure.size(); z++) {
+        for (int zp = 0; zp < eClosure.size(); zp++) {
             for (int j = 0; j < symbols.size(); j++) {
 
                 LinkedList<LinkedList<String>> temppp = copyLinkedList(states);
                 LinkedList<String> temp = new LinkedList();
-                temp.add(String.valueOf(z));
+                temp.add(String.valueOf(zp));
                 temp.add(symbols.get(j));
-                for (int i = 0; i < eClosure.get(z).size(); i++) {
+                for (int i = 0; i < eClosure.get(zp).size(); i++) {
 
-                    result = findAny(eClosure.get(z).get(i).toString(), -1);
-                    result = findAny((symbols.get(j).toString()), result[0]);
+                    result = findAny(eClosure.get(zp).get(i).toString(), -1);//miad donbale state morede nazar migarde
+                    result = findAny((symbols.get(j).toString()), result[0]);//donbal symbol morede nazar toye zone k khat bala pyda kardim migardehhhhh
                     if (!isArrayNull(result)) {
 
                         count = count(states.get(result[0]), symbols.get(j));
                         states.get((int) result[0]).remove((int) result[1]);//delete mikonim
-                        temp.add(states.get((int) result[0]).get((int) result[1]));
+                        temp.add(states.get((int) result[0]).get((int) result[1]));//chone symbol hazf shode dige result[1]+1 nemizaarim!!!!
                         tempA = temp.getLast();
                         for (int a = 0; a < count - 1; a++) {
 
@@ -332,7 +332,7 @@ public class Main {
             }
 
         }
-        //set kardane khode state Trap
+//        set kardane khode state Trap
         if(trapIsAvable==true){
 
             for(int i = 0; i < symbols.size(); i++){
@@ -361,7 +361,7 @@ public class Main {
 
     public static void findFinalState(){
         String out="";
-        for(int j=0;j<finalState.length;j++) {
+        for(int j=0;j<finalState.length;j++) {//q5 q4
 
             for (int i = 0; i < eClosure.size(); i++) {
 
