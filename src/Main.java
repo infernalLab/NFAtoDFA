@@ -166,6 +166,10 @@ public class Main {
 
                         }
 
+                        //sort kardanelist!
+                        tempEclosure.stream().sorted();
+
+
                         break;
 
                     }
@@ -250,7 +254,6 @@ public class Main {
                 temp.add(String.valueOf(zp));
                 temp.add(symbols.get(j));
                 for (int i = 0; i < eClosure.get(zp).size(); i++) {
-
                     result = findAny(eClosure.get(zp).get(i).toString(), -1);//miad donbale state morede nazar migarde
                     result = findAny((symbols.get(j).toString()), result[0]);//donbal symbol morede nazar toye zone k khat bala pyda kardim migardehhhhh
                     if (!isArrayNull(result)) {
@@ -258,13 +261,17 @@ public class Main {
                         count = count(states.get(result[0]), symbols.get(j));
                         states.get((int) result[0]).remove((int) result[1]);//delete mikonim
                         temp.add(states.get((int) result[0]).get((int) result[1]));//chone symbol hazf shode dige result[1]+1 nemizaarim!!!!
-                        tempA = temp.getLast();
+                        if(!tempA.isEmpty()) {
+                            tempA = tempA +" "+ temp.getLast().toString();
+                        } else  {
+                            tempA = temp.getLast().toString();
+                        }
                         for (int a = 0; a < count - 1; a++) {
 
                             result = findAny((symbols.get(j).toString()), result[0]);
                             states.get((int) result[0]).remove((int) result[1]);//delete mikonim
                             temp.add(states.get((int) result[0]).get((int) result[1]));
-                            tempA = tempA + " " + temp.getLast();
+                            tempA = tempA + " " + temp.getLast().toString();
 
                         }
                     }
